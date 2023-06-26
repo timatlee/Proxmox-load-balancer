@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-# Proxmox-load-balancer v0.6.3-betta Copyright (C) 2022 cvk98 (github.com/cvk98)
+# Proxmox-load-balancer v0.6.4-betta Copyright (C) 2022 cvk98 (github.com/cvk98)
 
 import sys
 import requests
@@ -174,6 +174,8 @@ class Cluster:
         for item in temp:
             if item["type"] == "node":
                 self.cluster_information.remove(item)
+                if item["status"] != "online":                              # Ignore nodes that are not online
+                    continue
                 item["cpu_used"] = round(item["maxcpu"] * item["cpu"], 2)   # Adding the value of the cores used
                 item["free_mem"] = item["maxmem"] - item["mem"]             # Adding the value of free RAM
                 item["mem_load"] = item["mem"] / item["maxmem"]             # Adding the RAM load value
